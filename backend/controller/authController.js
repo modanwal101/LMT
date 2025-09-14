@@ -20,7 +20,7 @@ export const signup = async (req, res) => {
         const user = await User.create({
             name,
             email,
-            password: hashpassword, // ✅ save hashed password
+            password: hashpassword, 
             role
         });
         let token = await gentoken(user._id);
@@ -40,7 +40,7 @@ export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
         let user = await User.findOne({ email });
-        if (!user) { // ✅ check user, not User
+        if (!user) { 
             return res.status(404).json({ message: "User not found" });
         }
         let isMatch = await bcrypt.compare(password, user.password);
@@ -48,7 +48,7 @@ export const login = async (req, res) => {
             return res.status(400).json({ message: "Incorrect password" });
         }
         let token = await gentoken(user._id);
-        res.cookie("token", token, { // ✅ use res.cookie
+        res.cookie("token", token, { 
             httpOnly: true,
             secure: false,
             sameSite: "Strict",
@@ -63,7 +63,7 @@ export const login = async (req, res) => {
 export const logOut = async (req, res) => {
     try {
         res.clearCookie("token"); // ✅ clear cookie synchronously
-        return res.status(200).json({ message: "Logged out successfully" }); // ✅ correct message
+        return res.status(200).json({ message: "Logged out successfully" }); 
     } catch (error) {
         return res.status(500).json({ message: `Logout error ${error.message}` });
     }
